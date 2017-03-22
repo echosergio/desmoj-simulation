@@ -19,12 +19,24 @@ public class ClientPayEndEvent extends EventOf2Entities<Worker,Client> {
 
         myModel.clientWithOrderQueue.insert(client);
 
+        Order order = new Order(myModel, "Food", true);
+        order.setClient(client);
+        myModel.orderQueue.insert(order);
+
         if (!myModel.idleCookQueue.isEmpty())
         {
             Cook cook = myModel.idleCookQueue.first();
             myModel.idleCookQueue.remove(cook);
+
             OrderEndEvent orderEndEvent = new OrderEndEvent (myModel, "OrderEndEvent", true);
-            orderEndEvent.schedule(cook, client, new TimeSpan(myModel.getOrderTime(), TimeUnit.MINUTES));
+            orderEndEvent.schedule(cook, new TimeSpan(0, TimeUnit.MINUTES));
+        }
+
+        while (!myModel.foodQueue.isEmpty())
+        {
+            Food food = myModel.foodQueue.first();
+            myModel.foodQueue.remove(food);
+            myModel.clientWithOrderQueue.remove(food.getClient());
         }
 
         myModel.idleWorkerQueue.insert(worker);

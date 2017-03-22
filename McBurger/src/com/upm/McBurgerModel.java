@@ -12,13 +12,15 @@ public class McBurgerModel extends Model {
 
     private ContDistExponential clientArrivalTime;
     private ContDistExponential prepareOrderTime;
-    private ContDistExponential orderTime;
+    private ContDistExponential prepareFoodTime;
     private ContDistExponential clientPayTime;
 
     protected Queue<Client> clientQueue;
     protected Queue<Client> clientWithOrderQueue;
     protected Queue<Worker> idleWorkerQueue;
     protected Queue<Cook> idleCookQueue;
+    protected Queue<Order> orderQueue;
+    protected Queue<Food> foodQueue;
 
     protected int workerNumber;
     protected int cookNumber;
@@ -50,8 +52,8 @@ public class McBurgerModel extends Model {
         return prepareOrderTime.sample();
     }
 
-    public double getOrderTime() {
-        return orderTime.sample();
+    public double getPrepareFoodTime() {
+        return prepareFoodTime.sample();
     }
 
     public double getClientPayTime() {
@@ -67,8 +69,8 @@ public class McBurgerModel extends Model {
         prepareOrderTime = new ContDistExponential(this, "prepareOrderTime", 4.0, true, false);
         prepareOrderTime.setNonNegative(true);
 
-        orderTime = new ContDistExponential(this, "orderTime", 9.0, true, false);
-        orderTime.setNonNegative(true);
+        prepareFoodTime = new ContDistExponential(this, "prepareFoodTime", 9.0, true, false);
+        prepareFoodTime.setNonNegative(true);
 
         clientPayTime = new ContDistExponential(this, "clientPayTime", 2.0, true, false);
         clientPayTime.setNonNegative(true);
@@ -78,6 +80,8 @@ public class McBurgerModel extends Model {
         clientWithOrderQueue = new Queue<>(this, "clientWithOrderQueue", true, false);
         idleWorkerQueue = new Queue<>(this, "idleWorkerQueue", true, false);
         idleCookQueue = new Queue<>(this, "idleCookQueue", true, false);
+        orderQueue = new Queue<>(this, "orderQueue", true, false);
+        foodQueue = new Queue<>(this, "foodQueue", true, false);
 
         for (int i = 0; i < workerNumber; i++) {
             idleWorkerQueue.insert(new Worker(this, "Worker", true));

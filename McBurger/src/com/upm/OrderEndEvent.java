@@ -1,12 +1,12 @@
 package com.upm;
 
-import desmoj.core.simulator.EventOf2Entities;
+import desmoj.core.simulator.Event;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
 
 import java.util.concurrent.TimeUnit;
 
-public class OrderEndEvent extends EventOf2Entities<Cook,Client> {
+public class OrderEndEvent extends Event<Cook> {
 
     private McBurgerModel myModel;
 
@@ -15,19 +15,16 @@ public class OrderEndEvent extends EventOf2Entities<Cook,Client> {
         myModel = (McBurgerModel)owner;
     }
 
-    public void eventRoutine(Cook cook, Client client) {
-        sendTraceNote(cook + " finish the order");
-        sendTraceNote(client + " gets the order");
+    public void eventRoutine(Cook cook) {
 
-        myModel.clientWithOrderQueue.remove(client);
-        myModel.idleCookQueue.insert(cook);
-
-        if (!myModel.clientWithOrderQueue.isEmpty())
+        if (!myModel.orderQueue.isEmpty())
         {
-            Client nextClient = myModel.clientWithOrderQueue.first();
-            myModel.clientWithOrderQueue.remove(nextClient);
+            Order order = myModel.orderQueue.first();
+            myModel.orderQueue.remove(order);
             myModel.idleCookQueue.remove(cook);
-            this.schedule(cook, client, new TimeSpan(myModel.getOrderTime(), TimeUnit.MINUTES));
+
+            PrepareFoodEndEvent prepareFoodEndEvent = new PrepareFoodEndEvent (myModel, "PrepareFoodEndEvent", true);
+            prepareFoodEndEvent.schedule(cook, order, new TimeSpan(myModel.getPrepareFoodTime(), TimeUnit.MINUTES));
         }
     }
 }
