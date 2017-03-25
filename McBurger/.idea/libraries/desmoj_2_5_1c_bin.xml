@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="desmoj-2.5.1c-bin">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/desmoj-2.5.1c-bin.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
