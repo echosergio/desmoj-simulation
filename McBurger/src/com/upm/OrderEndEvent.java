@@ -21,7 +21,6 @@ public class OrderEndEvent extends Event<Cook> {
         {
             Order order = myModel.orderQueue.first();
             myModel.orderQueue.remove(order);
-            myModel.idleCookQueue.remove(cook);
 
             PrepareFoodEndEvent prepareFoodEndEvent = new PrepareFoodEndEvent (myModel, "PrepareFoodEndEvent", true);
             prepareFoodEndEvent.schedule(cook, order, new TimeSpan(myModel.getPrepareFoodTime(), TimeUnit.MINUTES));

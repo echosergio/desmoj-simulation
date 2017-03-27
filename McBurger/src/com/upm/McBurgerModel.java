@@ -101,7 +101,7 @@ public class McBurgerModel extends Model {
         mcBurgerModel.connectToExperiment(experiment);
 
         experiment.tracePeriod(new TimeInstant(0), new TimeInstant(100));
-        experiment.stop(new TimeInstant(15000));
+        experiment.stop(new TimeInstant(150000));
         experiment.setShowProgressBar(false);
         experiment.start();
         experiment.report();
